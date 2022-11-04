@@ -16,7 +16,7 @@ class Regex(AddOn):
 
         # patterns that are passed as parameters
         # to this add-on when we run it.
-        pattern_list = self.data["regex"]
+        pattern_list = []
 
         # patterns that are available in the neighbor CSV file.
         with open("patterns.csv", "r+") as pattern_file:
