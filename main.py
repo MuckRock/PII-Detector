@@ -13,7 +13,7 @@ class Detector(AddOn):
                 cc_list = CommonRegex.credit_cards(text)
                 
                 for ssn in ssn_list:
-                    document.annotations.create("SSN Found", (page-1), content=ssn_list[ssn].text)
+                    document.annotations.create("SSN Found", (page-1), content=ssn)
           
         # list matches in an output CSV file record.
         """ with open("matches.csv", "w+") as file_:
