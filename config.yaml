@@ -5,10 +5,4 @@ type: object
 documents:
   - selected
 properties:
-  regex:
-    type: array
-    default: [""]
-    items:
-      title: Regex
-      type: string
-      format: regex
+  []
