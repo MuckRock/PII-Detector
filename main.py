@@ -1,36 +1,26 @@
 """
-This is an add-on to search a document for a regex and output all of the matches
+This is an add-on to search a document for credit cards and social security numbers and create annotations on what pages these exist on. 
 """
-
-import csv
-import re
-
 from documentcloud.addon import AddOn
+import commonregex as CommonRegex
 
-
-class Regex(AddOn):
+class Detector(AddOn):
     def main(self):
         if not self.documents:
             self.set_message("Please select at least one document")
             return
-
-        # patterns that are passed as parameters
-        # to this add-on when we run it.
-        pattern_list = []
-
-        # patterns that are available in the neighbor CSV file.
-        with open("patterns.csv", "r+") as pattern_file:
-            csvreader = csv.reader(pattern_file)
-            for row in csvreader:
-                pattern_list.append(row[0])
-
-        # ensure that there is at fewest 1 pattern to search for.
-        if len(pattern_list) < 1:
-            self.set_message("Please provide at least one regular expression.")
-            return
-
+ 
+        for document in self.get_documents(): 
+            for page in range(1,document.pages+1):
+                text=document.get_page_text(page)
+                ssn_list = CommonRegex.ssn_numbers(text)
+                cc_list = CommonRegex.credit_cards(text)
+                
+                for ssn in ssn_list:
+                    document.annotations.create("SSN Found", (page-1), content=ssn_list[ssn].text)
+          
         # list matches in an output CSV file record.
-        with open("matches.csv", "w+") as file_:
+        """ with open("matches.csv", "w+") as file_:
 
             writer = csv.writer(file_)
             writer.writerow(["pattern", "match", "url"])
@@ -46,7 +36,7 @@ class Regex(AddOn):
                     )
 
             self.upload_file(file_)
-
+            """ 
 
 if __name__ == "__main__":
-    Regex().main()
+    Detector().main()
