@@ -10,7 +10,7 @@ class Detector(AddOn):
             self.set_message("Please select at least one document")
             return
  
-        for document in self.get_documents(): 
+        for document in self.documents: 
             for page in range(1,document.pages+1):
                 text=document.get_page_text(page)
                 ssn_list = CommonRegex.ssn_numbers(text)
