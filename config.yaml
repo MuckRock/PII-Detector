@@ -1,8 +1,6 @@
-title: Multiple Regex Extractor with Defaults
+title: PII Detector
 description: >-
-  This will return a CSV file of all strings the given regex matches in
-  the selected files for all of the patterns passed as parameters, including
-  those that are run by default in the 'patterns.csv' file.
+  This will return a CSV file of all strings that match a valid credit card or social security number in a document. 
 type: object
 documents:
   - selected
@@ -14,4 +12,3 @@ properties:
       title: Regex
       type: string
       format: regex
-required: [regex]
