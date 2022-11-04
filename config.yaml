@@ -4,5 +4,4 @@ description: >-
 type: object
 documents:
   - selected
-properties:
-{}
+properties: []
