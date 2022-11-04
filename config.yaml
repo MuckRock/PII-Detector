@@ -4,4 +4,7 @@ description: >-
 type: object
 documents:
   - selected
-properties: []
+properties: 
+  name: 
+    title: Name
+    type: String
