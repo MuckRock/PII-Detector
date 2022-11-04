@@ -6,10 +6,6 @@ import commonregex as CommonRegex
 
 class Detector(AddOn):
     def main(self):
-        if not self.documents:
-            self.set_message("Please select at least one document")
-            return
- 
         for document in self.get_documents():
             for page in range(1,document.pages+1):
                 text=document.get_page_text(page)
