@@ -11,28 +11,17 @@ class Detector(AddOn):
                 text=document.get_page_text(page)
                 ssn_list = CommonRegex.ssn_numbers(text)
                 cc_list = CommonRegex.credit_cards(text)
+                email_list = CommonRegex.emails(text)
+                phone_list = CommonRegex.phones_with_exts(text)
                 
                 for ssn in ssn_list:
                     document.annotations.create("SSN Found", (page-1), content=ssn)
+                for cc in cc_list:
+                    document.annotations.create("CC Found", (page-1), content=cc)
+                for email in email_list:
+                    document.annotations.create("Email Found", (page-1), content=email)
+                for phone in phone_list:
+                    document.annotations.create("Phone # Found", (page-1), content=phone)
           
-        # list matches in an output CSV file record.
-        """ with open("matches.csv", "w+") as file_:
-
-            writer = csv.writer(file_)
-            writer.writerow(["pattern", "match", "url"])
-
-            # find all examples of each supplied pattern.
-            for regex_pattern in pattern_list:
-                pattern = re.compile(regex_pattern)
-
-                for document in self.client.documents.list(id__in=self.documents):
-                    writer.writerows(
-                        [regex_pattern, m, document.canonical_url]
-                        for m in pattern.findall(document.full_text)
-                    )
-
-            self.upload_file(file_)
-            """ 
-
 if __name__ == "__main__":
     Detector().main()
