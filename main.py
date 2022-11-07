@@ -12,7 +12,7 @@ class Detector(AddOn):
                 ssn_list = CommonRegex.ssn_numbers(text)
                 cc_list = CommonRegex.credit_cards(text)
                 email_list = CommonRegex.emails(text)
-                phone_list = CommonRegex.phones_with_exts(text)
+                phone_list = CommonRegex.phones(text)
                 
                 for ssn in ssn_list:
                     document.annotations.create("SSN Found", (page-1), content=ssn)
