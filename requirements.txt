@@ -1,3 +1,4 @@
 python-documentcloud==3.1.0
 requests
 commonregex-improved
+pymupdf
