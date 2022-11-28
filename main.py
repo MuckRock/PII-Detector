@@ -9,7 +9,10 @@ class Detector(AddOn):
         detect_address = self.data.get('address')
         detect_phone = self.data.get('phone')
         detect_email = self.data.get('email')
-        
+        send_ssn_mail = False
+        send_cc_mail = False
+        send_iban_mail = False
+
         for document in self.get_documents():
             for page in range(1,document.pages+1):
                 text=document.get_page_text(page)
@@ -19,13 +22,13 @@ class Detector(AddOn):
                 
                 for ssn in ssn_list:
                     document.annotations.create("SSN Found", (page-1), content=ssn)
-                    self.send_mail("Sensitive PII Detected", f"SSN found in {document.canonical_url} on page # {page}")
+                    send_ssn_mail=True
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=cc)
-                    self.send_mail("Sensitive PII Detected", f"Credit Card # found in {document.canonical_url} on page # {page}") 
+                    send_cc_mail=True
                 for iban in iban_list:
                     document.annotations.create("IBAN # Found", (page-1), content=iban)
-                    self.send_mail("Sensitive PII Detected", f"IBAN # found in {document.canonical_url} on page # {page}")
+                    send_iban_mail=True
            
                 if detect_email is True:
                     email_list = CommonRegex.emails(text)
@@ -42,6 +45,13 @@ class Detector(AddOn):
                     address_list = CommonRegex.street_addresses(text)
                     for address in address_list:
                         document.annotations.create("Address Found", (page-1), content=address)
+        
+        if send_cc_mail is True:
+            self.send_mail("Sensitive PII Detected", f"Credit Card # found in {document.canonical_url}")
+        if send_ssn_mail is True:
+            self.send_mail("Sensitive PII Detected", f"SSN found in {document.canonical_url}")
+        if send_iban_mail is True:
+            self.send_mail("Sensitive PII Detected", f"IBAN # found in {document.canonical_url} on page # {page}")
                 
 if __name__ == "__main__":
     Detector().main()
