@@ -1,5 +1,5 @@
 """
-This is an add-on to search a document for credit cards and social security numbers and create annotations on what pages these exist on. 
+This is an add-on to search a document for PII create private annotations on what pages these exist on, it will additionally alert you to sensitive PII like social security numbers, IBANs, or credit card numbers by sending you an e-mail when one is detected.  
 """
 from documentcloud.addon import AddOn
 import commonregex as CommonRegex
@@ -19,10 +19,13 @@ class Detector(AddOn):
                 
                 for ssn in ssn_list:
                     document.annotations.create("SSN Found", (page-1), content=ssn)
+                    self.send_mail("Sensitive PII Detected", f"SSN found in {document.canonical_url} on page # {page}")
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=cc)
+                    self.send_mail("Sensitive PII Detected", f"Credit Card # found in {document.canonical_url} on page # {page}") 
                 for iban in iban_list:
                     document.annotations.create("IBAN # Found", (page-1), content=iban)
+                    self.send_mail("Sensitive PII Detected", f"IBAN # found in {document.canonical_url} on page # {page}")
            
                 if detect_email is True:
                     email_list = CommonRegex.emails(text)
