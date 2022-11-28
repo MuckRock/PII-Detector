@@ -19,12 +19,12 @@ class Detector(AddOn):
                     document.annotations.create("SSN Found", (page-1), content=ssn)
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=cc)
+                for iban in iban_list:
+                    document.annotations.create("IBAN # Found", (page-1), content=iban)
                 for email in email_list:
                     document.annotations.create("Email Found", (page-1), content=email)
                 for phone in phone_list:
                     document.annotations.create("Phone # Found", (page-1), content=phone)
-                for iban in iban_list:
-                    document.annotations.create("IBAN # Found", (page-1), content=iban)
-          
+                
 if __name__ == "__main__":
     Detector().main()
