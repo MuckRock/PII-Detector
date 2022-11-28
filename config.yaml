@@ -1,6 +1,6 @@
 title: PII Detector
 description: >-
-  This will annotate a document and send a message to the user when PII is found in a document or set of documents. It will automatically detect for social security numbers, credit card numbers, and IBAN numbers. You may optionally run it for names, addresses, and e=mail addresses as well. 
+  This will annotate a document when PII is found in a document or set of documents. If sensitive PII is found (SSN, CC#, or IBAN#), an e-mail alert will be sent to the user with a link to the document where sensitive PII is found. It will automatically detect for social security numbers, credit card numbers, and IBAN numbers. You may optionally run it for names, addresses, and e=mail addresses as well but it will only create annotations for these, not send e-mail alerts. 
 type: object
 documents:
   - selected
