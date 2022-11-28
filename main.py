@@ -17,19 +17,19 @@ class Detector(AddOn):
         
         for document in self.get_documents():
             for page in range(1,document.pages+1):
-             """text=document.get_page_text(page)
-                ssn_list = CommonRegex.ssn_numbers(text)
-                cc_list = CommonRegex.credit_cards(text)
-                iban_list = CommonRegex.iban_numbers(text)"""
                 url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = self.client.get(url, full_url=True)
                 positions = resp.json()
                 print(positions[:3])
                 for info in positions:
-                    if (CR.emails(info["text"]) is not None:
+                    if CR.emails(info["text"]) is not None:
                         email_list.append(info["text"])
-                    document.annotations.create(f"Email {info["text"]} found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                """
+                    document.annotations.create(f"Email {info['text']} found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+               
+                """text=document.get_page_text(page)
+                ssn_list = CommonRegex.ssn_numbers(text)
+                cc_list = CommonRegex.credit_cards(text)
+                iban_list = CommonRegex.iban_numbers(text)
                 for ssn in ssn_list:
                     document.annotations.create("SSN Found", (page-1), content=ssn)
                     send_ssn_mail=True
