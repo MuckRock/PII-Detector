@@ -6,9 +6,9 @@ import commonregex as CommonRegex
 
 class Detector(AddOn):
     def main(self):
-        detect_address = self.data.get["address"]
-        detect_phone = self.data.get["phone"]
-        detect_email = self.data.get["email"]
+        detect_address = self.data.get('address')
+        detect_phone = self.data.get('phone')
+        detect_email = self.data.get('email')
         
         for document in self.get_documents():
             for page in range(1,document.pages+1):
