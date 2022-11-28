@@ -2,7 +2,7 @@
 This is an add-on to search a document for PII create private annotations on what pages these exist on, it will additionally alert you to sensitive PII like social security numbers, IBANs, or credit card numbers by sending you an e-mail when one is detected.  
 """
 from documentcloud.addon import AddOn
-import commonregex as CommonRegex
+import commonregex as CR
 from listcrunch import uncrunch
 
 class Detector(AddOn):
@@ -13,14 +13,23 @@ class Detector(AddOn):
         send_ssn_mail = False
         send_cc_mail = False
         send_iban_mail = False
-
+        e_mail_list = []
+        
         for document in self.get_documents():
             for page in range(1,document.pages+1):
-                text=document.get_page_text(page)
+             """text=document.get_page_text(page)
                 ssn_list = CommonRegex.ssn_numbers(text)
                 cc_list = CommonRegex.credit_cards(text)
-                iban_list = CommonRegex.iban_numbers(text)
-                
+                iban_list = CommonRegex.iban_numbers(text)"""
+                url = (document.asset_url + f"documents/{document.id}/pages/" f"{document.slug}-p{page}.position.json)
+                resp = self.client.get(url, full_url=True)
+                positions = resp.json()
+                print(positions[:3])
+                for info in positions:
+                    if (CR.emails(info["text"]) is not None:
+                        email_list.append(info["text"])
+                    document.annotations.create(f"Email {info["text"]} found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                """
                 for ssn in ssn_list:
                     document.annotations.create("SSN Found", (page-1), content=ssn)
                     send_ssn_mail=True
@@ -53,6 +62,6 @@ class Detector(AddOn):
             self.send_mail("Sensitive PII Detected", f"SSN found in {document.canonical_url}")
         if send_iban_mail is True:
             self.send_mail("Sensitive PII Detected", f"IBAN # found in {document.canonical_url} on page # {page}")
-                
+        """
 if __name__ == "__main__":
     Detector().main()
