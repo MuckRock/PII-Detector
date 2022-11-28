@@ -13,6 +13,7 @@ class Detector(AddOn):
                 cc_list = CommonRegex.credit_cards(text)
                 email_list = CommonRegex.emails(text)
                 phone_list = CommonRegex.phones(text)
+                iban_list = CommonRegex.iban_numbers(text)
                 
                 for ssn in ssn_list:
                     document.annotations.create("SSN Found", (page-1), content=ssn)
@@ -22,6 +23,8 @@ class Detector(AddOn):
                     document.annotations.create("Email Found", (page-1), content=email)
                 for phone in phone_list:
                     document.annotations.create("Phone # Found", (page-1), content=phone)
+                for iban in iban_list:
+                    document.annotations.create("IBAN # Found", (page-1), content=iban)
           
 if __name__ == "__main__":
     Detector().main()
