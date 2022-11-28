@@ -1,6 +1,6 @@
 title: PII Detector
 description: >-
-  This will annotate a document and send a message to the user when PII is found in a document or set of documents. 
+  This will annotate a document and send a message to the user when PII is found in a document or set of documents. It will automatically detect for social security numbers, credit card numbers, and IBAN numbers. You may optionally run it for names, addresses, and e=mail addresses as well. 
 type: object
 documents:
   - selected
@@ -10,4 +10,7 @@ properties:
     type: boolean
   phone:
     title: Detect phone numbers?
+    type: boolean
+  address:
+    title: Detect addresses?
     type: boolean
