@@ -14,9 +14,6 @@ properties:
   address:
     title: Detect addresses
     type: boolean
-  annotate:
-    title: Do you want to annotate the document where PII is detected?
-    type: boolean
   redact:
     title: Do you want to redact where PII is detected?
     type: boolean
