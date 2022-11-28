@@ -21,7 +21,7 @@ class Detector(AddOn):
                 ssn_list = CommonRegex.ssn_numbers(text)
                 cc_list = CommonRegex.credit_cards(text)
                 iban_list = CommonRegex.iban_numbers(text)"""
-                url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json)
+                url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = self.client.get(url, full_url=True)
                 positions = resp.json()
                 print(positions[:3])
