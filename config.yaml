@@ -1,10 +1,6 @@
 title: PII Detector
 description: >-
-  This will return a CSV file of all strings that match a valid credit card or social security number in a document. 
+  This will annotate a document and send a message to the user when PII is found in a document or set of documents. 
 type: object
 documents:
   - selected
-properties: 
-  name: 
-    title: Name
-    type: string
