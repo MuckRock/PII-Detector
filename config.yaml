@@ -1,6 +1,6 @@
 title: PII Detector
 description: >-
-  This add-on will detect PII in a document and automatically e-mail you when sensitive PII is detected. It additionally gives you an option to search for e-mails, phone numbers, and addresses which will be e-mailed to you if detected. It optionally allows you to annotate the location of PII within a document.  
+  This add-on will detect PII in a document and automatically e-mail you when sensitive PII is detected. It will redact PII if selected, otherwise will just leave an annotation.
 type: object
 documents:
   - selected
