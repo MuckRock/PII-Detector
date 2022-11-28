@@ -1,16 +1,19 @@
 title: PII Detector
 description: >-
-  This will annotate a document when PII is found in a document or set of documents. If sensitive PII is found (SSN, CC#, or IBAN#), an e-mail alert will be sent to the user with a link to the document where sensitive PII is found. It will automatically detect for social security numbers, credit card numbers, and IBAN numbers. You may optionally run it for names, addresses, and e=mail addresses as well but it will only create annotations for these, not send e-mail alerts. 
+  This add-on will detect PII in a document and automatically e-mail you when sensitive PII is detected. It additionally gives you an option to search for e-mails, phone numbers, and addresses which will be e-mailed to you if detected. It optionally allows you to annotate the location of PII within a document.  
 type: object
 documents:
   - selected
 properties: 
   email:
-    title: Detect e-mails?
+    title: Detect e-mails
     type: boolean
   phone:
-    title: Detect phone numbers?
+    title: Detect phone numbers
     type: boolean
   address:
-    title: Detect addresses?
+    title: Detect addresses
+    type: boolean
+  annotate:
+    title: Do you want this add-on to annotate the document where PII is detected?
     type: boolean
