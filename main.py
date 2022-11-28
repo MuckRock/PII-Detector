@@ -17,8 +17,8 @@ class Detector(AddOn):
         
         for document in self.get_documents():
             for page in range(1,document.pages+1):
-                documents/\<id>/pages/\<slug>-p\<page number>.txt
-                url = (document.asset_url + f"documents/{document.id}/pages/" f"{document.slug}-p{page}.position.json")
+                did = document.id
+                url = (document.asset_url + f"documents/{did}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = self.client.get(url, full_url=True)
                 positions = resp.json()
                 print(positions[:3])
