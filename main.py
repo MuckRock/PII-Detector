@@ -3,6 +3,7 @@ This is an add-on to search a document for PII create private annotations on wha
 """
 from documentcloud.addon import AddOn
 import commonregex as CommonRegex
+from listcrunch import uncrunch
 
 class Detector(AddOn):
     def main(self):
