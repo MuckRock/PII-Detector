@@ -7,3 +7,4 @@ One can provide this add-on a set of documents and it will search through the pa
 - Credit card numbers
 - Phone numbers
 - Emails 
+- IBANs
