@@ -46,7 +46,7 @@ class Detector(AddOn):
                                 document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
 
                 if detect_phone is True:
-                    phone_list = CR.phones(text) + CommonRegex.phones_with_exts(text)
+                    phone_list = CR.phones(text) + CR.phones_with_exts(text)
                     phone_list = list(set(phone_list))
                     for phone in phone_list:
                         for info in positions:
