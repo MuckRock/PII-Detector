@@ -14,7 +14,7 @@ class Detector(AddOn):
         send_ssn_mail = False
         send_cc_mail = False
         send_iban_mail = False
-        e_mail_list = []
+        email_list = []
         
         for document in self.get_documents():
             for page in range(1,document.pages+1):
