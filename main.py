@@ -18,16 +18,45 @@ class Detector(AddOn):
         for document in self.get_documents():
             for page in range(1,document.pages+1):
                 text=document.get_page_text(page)
-                email_list = CR.emails(text)
-                email_list = list(set(email_list))
+                ssn_list = CommonRegex.ssn_numbers(text)
+                cc_list = CommonRegex.credit_cards(text)
+                iban_list = CommonRegex.iban_numbers(text)
                 url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
-                for email in email_list:
+                
+                for ssn in ssn_list:
                     for info in positions:
-                        if email in info['text']:
-                            document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-               
+                        if ssn in info['text']:
+                            document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                
+                for cc in cc_list:
+                    document.annotations.create("CC Found", (page-1), content=f"Last four digits: {cc[-4:]}")
+                
+                for iban in iban_list:
+                    document.annotations.create("IBAN # Found", (page-1), content=f"Last two digits: {iban[-2:]}")
+
+                if detect_email is True:
+                    email_list = CR.emails(text)
+                    email_list = list(set(email_list))
+                    for email in email_list:
+                        for info in positions:
+                            if email in info['text']:
+                                document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+
+                if detect_phone is True:
+                    phone_list = CommonRegex.phones(text) + CommonRegex.phones_with_exts(text)
+                    phone_list = list(set(phone_list))
+                    for phone in phone_list:
+                        for info in positions:
+                            if phone in info['text']:
+                                document.annotations.create(f"Phone # found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                
+                if detect_address is True:
+                    address_list = CommonRegex.street_addresses(text)
+                    for address in address_list:
+                        document.annotations.create("Address found on this page", (page-1), content=address)
+                                
                 """text=document.get_page_text(page)
                 ssn_list = CommonRegex.ssn_numbers(text)
                 cc_list = CommonRegex.credit_cards(text)
