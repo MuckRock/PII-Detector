@@ -22,10 +22,9 @@ class Detector(AddOn):
                 url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
-                print(positions[:3])
-                for info in positions:
-                    if any(info['text'] in s for s in email_list):
-                        document.annotations.create(f"Email {info['text']} found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                for email in email_list:
+                    if if any(email in s for s['text'] in positions):
+                        document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                
                 """text=document.get_page_text(page)
                 ssn_list = CommonRegex.ssn_numbers(text)
