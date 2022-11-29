@@ -18,9 +18,9 @@ class Detector(AddOn):
         for document in self.get_documents():
             for page in range(1,document.pages+1):
                 text=document.get_page_text(page)
-                ssn_list = CommonRegex.ssn_numbers(text)
-                cc_list = CommonRegex.credit_cards(text)
-                iban_list = CommonRegex.iban_numbers(text)
+                ssn_list = CR.ssn_numbers(text)
+                cc_list = CR.credit_cards(text)
+                iban_list = CR.iban_numbers(text)
                 url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
@@ -45,7 +45,7 @@ class Detector(AddOn):
                                 document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
 
                 if detect_phone is True:
-                    phone_list = CommonRegex.phones(text) + CommonRegex.phones_with_exts(text)
+                    phone_list = CR.phones(text) + CommonRegex.phones_with_exts(text)
                     phone_list = list(set(phone_list))
                     for phone in phone_list:
                         for info in positions:
@@ -53,7 +53,7 @@ class Detector(AddOn):
                                 document.annotations.create(f"Phone # found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                 
                 if detect_address is True:
-                    address_list = CommonRegex.street_addresses(text)
+                    address_list = CR.street_addresses(text)
                     for address in address_list:
                         document.annotations.create("Address found on this page", (page-1), content=address)
                                 
