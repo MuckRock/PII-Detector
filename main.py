@@ -23,7 +23,7 @@ class Detector(AddOn):
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
                 for email in email_list:
-                    if if any(email in s for s['text'] in positions):
+                    if any(email in s for s['text'] in positions):
                         document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                
                 """text=document.get_page_text(page)
