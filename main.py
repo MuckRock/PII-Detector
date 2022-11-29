@@ -18,7 +18,7 @@ class Detector(AddOn):
         for document in self.get_documents():
             for page in range(1,document.pages+1):
                 text=document.get_page_text(page)
-                email_list = CommonRegex.emails(text)
+                email_list = CR.emails(text)
                 url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
