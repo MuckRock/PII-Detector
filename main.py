@@ -4,6 +4,7 @@ This is an add-on to search a document for PII create private annotations on wha
 from documentcloud.addon import AddOn
 import commonregex as CR
 from listcrunch import uncrunch
+import requests
 
 class Detector(AddOn):
     def main(self):
@@ -17,8 +18,8 @@ class Detector(AddOn):
         
         for document in self.get_documents():
             for page in range(1,document.pages+1):
-                url = (document.asset_url + f"documents/23303872/pages/" + f"{document.slug}-p{page}.position.json")
-                resp = self.client.get(url, full_url=True)
+                url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
+                resp = requests.get(url, timeout=10)
                 positions = resp.json()
                 print(positions[:3])
                 for info in positions:
