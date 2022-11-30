@@ -11,9 +11,7 @@ class Detector(AddOn):
         detect_address = self.data.get('address')
         detect_phone = self.data.get('phone')
         detect_email = self.data.get('email')
-        send_ssn_mail = False
-        send_cc_mail = False
-        send_iban_mail = False
+        alert = self.data.get('alert')
         
         for document in self.get_documents():
             for page in range(1,document.pages+1):
@@ -27,12 +25,13 @@ class Detector(AddOn):
                 url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
-                
-                """ for ssn in ssn_list:
+                print(positions[:3])
+
+                for ssn in ssn_list:
                     for info in positions:
-                        if ssn in info.get("text"):
+                        if ssn in info['text']:
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                """
+                
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=f"Last four digits: {cc[-4:]}")
                 
@@ -59,16 +58,9 @@ class Detector(AddOn):
                     address_list = CR.street_addresses(text)
                     for address in address_list:
                         document.annotations.create("Address found on this page", (page-1), content=address)
-
-
-                
-        """                        
-        if send_cc_mail is True:
-            self.send_mail("Sensitive PII Detected", f"Credit Card # found in {document.canonical_url}")
-        if send_ssn_mail is True:
-            self.send_mail("Sensitive PII Detected", f"SSN found in {document.canonical_url}")
-        if send_iban_mail is True:
-            self.send_mail("Sensitive PII Detected", f"IBAN # found in {document.canonical_url} on page # {page}")
-        """
+                     
+        if alert is True:
+            self.send_mail("PII Detected", f"PII was found in {document.canonical_url}")
+       
 if __name__ == "__main__":
     Detector().main()
