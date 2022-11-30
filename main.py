@@ -28,11 +28,11 @@ class Detector(AddOn):
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
                 
-                for ssn in ssn_list:
+                """ for ssn in ssn_list:
                     for info in positions:
                         if ssn in info.get("text"):
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-
+                """
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=f"Last four digits: {cc[-4:]}")
                 
