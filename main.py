@@ -43,6 +43,7 @@ class Detector(AddOn):
                     email_list = list(set(email_list))
                     for email in email_list:
                         for info in positions:
+                            print(type(info))
                             if email in info['text']:
                                 document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
 
