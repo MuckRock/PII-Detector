@@ -36,7 +36,7 @@ class Detector(AddOn):
 
                 for ssn in ssn_list:
                     for info in positions:
-                        if ssn in info['text']:
+                        if ssn in info["text"]:
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
 
                 if detect_email is True:
