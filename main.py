@@ -26,12 +26,7 @@ class Detector(AddOn):
                 url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
-                """
-                for ssn in ssn_list:
-                    for info in positions:
-                       if ssn in info['text']:
-                            document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                """
+              
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=f"Last four digits: {cc[-4:]}")
                     detect_PII = True
@@ -65,6 +60,11 @@ class Detector(AddOn):
                         document.annotations.create("Address found on this page", (page-1), content=address)
                         detect_PII = True
                      
+                for ssn in ssn_list:
+                    for info in positions:
+                       if ssn in info['text']:
+                            document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+
         if alert and detect_PII is True:
             self.send_mail("PII Detected", f"Personally identifying information was found in {document.canonical_url} please open the document to view more detail.")
        
