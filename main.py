@@ -28,16 +28,16 @@ class Detector(AddOn):
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
                 
+                for ssn in ssn_list:
+                    for info in positions:
+                        if ssn in info.get("text"):
+                            document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=f"Last four digits: {cc[-4:]}")
                 
                 for iban in iban_list:
                     document.annotations.create("IBAN # Found", (page-1), content=f"Last two digits: {iban[-2:]}")
-
-                for ssn in ssn_list:
-                    for info in positions:
-                        if ssn in info["text"]:
-                            document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
 
                 if detect_email is True:
                     email_list = CR.emails(text)
@@ -59,6 +59,9 @@ class Detector(AddOn):
                     address_list = CR.street_addresses(text)
                     for address in address_list:
                         document.annotations.create("Address found on this page", (page-1), content=address)
+
+
+                
         """                        
         if send_cc_mail is True:
             self.send_mail("Sensitive PII Detected", f"Credit Card # found in {document.canonical_url}")
