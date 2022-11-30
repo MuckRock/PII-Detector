@@ -5,6 +5,7 @@ from documentcloud.addon import AddOn
 import commonregex as CR
 from listcrunch import uncrunch
 import requests
+import time
 
 class Detector(AddOn):
     def main(self):
@@ -25,7 +26,7 @@ class Detector(AddOn):
                 url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
                 resp = requests.get(url, timeout=10)
                 positions = resp.json()
-                print(positions[:3])
+                time.sleep(3)
 
                 for ssn in ssn_list:
                     for info in positions:
