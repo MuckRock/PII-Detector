@@ -64,6 +64,7 @@ class Detector(AddOn):
                     for info in positions:
                        if ssn in info['text']:
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            detect_PII = True
 
         if alert and detect_PII is True:
             self.send_mail("PII Detected", f"Personally identifying information was found in {document.canonical_url} please open the document to view more detail.")
