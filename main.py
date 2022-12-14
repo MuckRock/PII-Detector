@@ -23,19 +23,22 @@ class Detector(AddOn):
                 positions = document.get_page_position_json(page)
               
                 for cc in cc_list:
-                    document.annotations.create("CC Found", (page-1), content=f"Last four digits: {cc[-4:]}")
-                    detect_PII = True
+                    for info in positions:
+                        if cc[-4] in info['text']
+                            document.annotations.create("CC Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            detect_PII = True
                 
                 for iban in iban_list:
-                    document.annotations.create("IBAN # Found", (page-1), content=f"Last two digits: {iban[-2:]}")
-                    detect_PII = True
+                    for info in positions:
+                        if iban in info['text']:
+                            document.annotations.create("IBAN # Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            detect_PII = True
 
                 if detect_email is True:
                     email_list = CR.emails(text)
                     email_list = list(set(email_list))
                     for email in email_list:
                         for info in positions:
-                            print(type(info))
                             if email in info['text']:
                                 document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                                 detect_PII = True
@@ -57,7 +60,7 @@ class Detector(AddOn):
                      
                 for ssn in ssn_list:
                     for info in positions:
-                       if ssn in info['text']:
+                       if ssn[-4] in info['text']:
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
 
