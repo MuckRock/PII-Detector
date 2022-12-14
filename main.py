@@ -48,8 +48,9 @@ class Detector(AddOn):
               
                 for ssn in ssn_list:
                     for info in positions:
-                       if ssn in info['text']:
-                            document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                       if ssn[-4:] in info['text']:
+                            document.annotations.create(f"SSN found",page-1,x1=info["x2"]-0.08,y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            positions.remove(info)
                             detect_PII = True
                 for cc in cc_list:
                     for info in positions:
