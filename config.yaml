@@ -14,9 +14,6 @@ properties:
   address:
     title: Detect addresses
     type: boolean
-  redact:
-    title: Do you want to redact where PII is detected?
-    type: boolean
   alert:
     title: Do you want an e-mail notification if PII was detected in a document?
     type: boolean
