@@ -41,10 +41,10 @@ class Detector(AddOn):
                     address_list = address_list + CR.street_addresses(text) + CR.po_boxes(text)
                 if detect_email is True:
                     email_list = email_list + list(set(CR.emails(text)))
-                 if detect_phone is True:
+                if detect_phone is True:
                     phone_list = phone_list + CR.phones(text) + CR.phones_with_exts(text)
                     phone_list = list(set(phone_list))
-                 if detect_zip is True:
+                if detect_zip is True:
                     zipcode_list = CR.zip_codes(text)
               
                 for info in positions:
