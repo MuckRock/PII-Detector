@@ -17,17 +17,10 @@ class Detector(AddOn):
         for document in self.get_documents():
             for page in range(1,document.pages+1):
                 text=document.get_page_text(page)
-                ssn_list = CR.ssn_numbers(text)
-                ssn_list = list(set(ssn_list))
-                cc_list = CR.credit_cards(text)
-                cc_list = list(set(cc_list))
-                iban_list = CR.iban_numbers(text)
-                iban_list = list(set(iban_list))
-                
+                ssn_list = list(set(CR.ssn_numbers(text)))
+                cc_list = list(set(CR.credit_cards(text)))
+                iban_list = list(set(CR.iban_numbers(text)))
                 positions = document.get_page_position_json(page)
-                # url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
-                # resp = requests.get(url, timeout=10)
-                # positions = resp.json()
               
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=f"Last four digits: {cc[-4:]}")
