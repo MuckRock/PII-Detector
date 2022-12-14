@@ -26,7 +26,7 @@ class Detector(AddOn):
                     for info in positions:
                         if cc[-4] in info['text']:
                             document.annotations.create("CC Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                            cc_list.remove(cc)
+                            cc_list.pop(cc)
                             detect_PII = True
                 
                 for iban in iban_list:
@@ -50,7 +50,7 @@ class Detector(AddOn):
                         for info in positions:
                             if phone[-4] in info['text']:
                                 document.annotations.create(f"Phone # found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                                phone_list.remove(phone)
+                                phone_list.pop(phone)
                                 detect_PII = True
                 
                 if detect_address is True:
@@ -63,7 +63,7 @@ class Detector(AddOn):
                     for info in positions:
                        if ssn[-4] in info['text']:
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                            ssn_list.remove(ssn)
+                            ssn_list.pop(ssn)
                             detect_PII = True
 
         if alert and detect_PII is True:
