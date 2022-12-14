@@ -47,83 +47,39 @@ class Detector(AddOn):
                 if detect_zip is True:
                     zipcode_list = CR.zip_codes(text)
               
-                for info in positions:
-                    if info['text'] in ssn_list:
-                        document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                        detect_PII = True
-                    elif info['text'] in cc_list:
-                        document.annotations.create("CC Found",page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                        detect_PII = True  
-                    elif info['text'] in iban_list:
-                        document.annotations.create("IBAN # Found",page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                        detect_PII = True
-                    elif info['text'] in address_list:
-                        document.annotations.create("Address found on this page",page-1, content=address)
-                        detect_PII = True      
-                    elif info['text'] in email_list:
-                        document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                        detect_PII = True
-                    elif info['text'] in phone_list:
-                        document.annotations.create(f"Phone # found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                        detect_PII = True
-                    elif info['text'] in zipcode_list:
-                        document.annotations.create(f"Zip Code Found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                        detect_PII = True
-                        
-                """
                 for ssn in ssn_list:
                     for info in positions:
                        if ssn[-4] in info['text']:
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
-                            break
-
                 for cc in cc_list:
                     for info in positions:
                         if cc[-4] in info['text']:
                             document.annotations.create("CC Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
-                            break
-                
                 for iban in iban_list:
                     for info in positions:
                         if iban in info['text']:
                             document.annotations.create("IBAN # Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
-
-                if detect_email is True:
-                    email_list = list(set(CR.emails(text)))
-                    for email in email_list:
-                        for info in positions:
-                            if email in info['text']:
-                                document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                                detect_PII = True
-
-                if detect_phone is True:
-                    phone_list = CR.phones(text) + CR.phones_with_exts(text)
-                    phone_list = list(set(phone_list))
-                    for phone in phone_list:
+                for email in email_list:
+                    for info in positions:
+                        if email in info['text']:
+                            document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            detect_PII = True
+                for phone in phone_list:
                         for info in positions:
                             if phone[-4] in info['text']:
                                 document.annotations.create(f"Phone # found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                                 detect_PII = True
-                                break
-                
-                if detect_address is True:
-                    address_list = CR.street_addresses(text)
-                    pobox_list = CR.po_boxes(text)
-                    address_list = address_list + pobox_list
-                    for address in address_list:
+                for address in address_list:
                         document.annotations.create("Address found on this page", (page-1), content=address)
                         detect_PII = True
-            
-               if detect_zip is True:
-                    zipcode_list = CR.zip_codes(text)
-                    for zipcode in zipcode_list:
-                        for info in positions:
-                            if zipcode in info['text']:
-                                document.annotations.create(f"Zip Code Found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                   """
+           
+                for zipcode in zipcode_list:
+                    for info in positions:
+                        if zipcode in info['text']:
+                            document.annotations.create(f"Zip Code Found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                 
         if alert and detect_PII is True:
             self.send_mail("PII Detected", f"Personally identifying information was found in {document.canonical_url} please open the document to view more detail.")
