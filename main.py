@@ -2,7 +2,7 @@
 This is an add-on to search a document for PII create private annotations on what pages these exist on, it will additionally alert you to sensitive PII like social security numbers, IBANs, or credit card numbers by sending you an e-mail when one is detected.  
 """
 from documentcloud.addon import AddOn
-import commonregex-improved as CR
+import commonregex as CR
 from listcrunch import uncrunch
 import requests
 
