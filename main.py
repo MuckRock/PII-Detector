@@ -24,7 +24,7 @@ class Detector(AddOn):
               
                 for cc in cc_list:
                     for info in positions:
-                        if cc[-4] in info['text']
+                        if cc[-4] in info['text']:
                             document.annotations.create("CC Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
                 
