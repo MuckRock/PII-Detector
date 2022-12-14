@@ -23,9 +23,11 @@ class Detector(AddOn):
                 cc_list = list(set(cc_list))
                 iban_list = CR.iban_numbers(text)
                 iban_list = list(set(iban_list))
-                url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
-                resp = requests.get(url, timeout=10)
-                positions = resp.json()
+                
+                positions = document.get_page_position_json(page)
+                # url = (document.asset_url + f"documents/{document.id}/pages/" + f"{document.slug}-p{page}.position.json")
+                # resp = requests.get(url, timeout=10)
+                # positions = resp.json()
               
                 for cc in cc_list:
                     document.annotations.create("CC Found", (page-1), content=f"Last four digits: {cc[-4:]}")
