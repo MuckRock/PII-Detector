@@ -3,7 +3,6 @@ This is an add-on to search a document for PII create private annotations on wha
 """
 from documentcloud.addon import AddOn
 import crim as CR
-from listcrunch import uncrunch
 import requests
 
 class Detector(AddOn):
