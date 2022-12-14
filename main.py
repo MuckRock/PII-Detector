@@ -69,8 +69,8 @@ class Detector(AddOn):
                 for phone in phone_list:
                     for info in positions:
                         if phone[-4:] in info['text']:
-                            print(info['text'])
                             document.annotations.create(f"Phone # found",page-1,x1=info["x2"]-0.08,y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            positions.remove(info)
                             detect_PII = True
                 for address in address_list:
                     document.annotations.create("Address found on this page", page-1, content=address)
