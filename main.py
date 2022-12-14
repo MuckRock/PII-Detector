@@ -49,12 +49,12 @@ class Detector(AddOn):
               
                 for ssn in ssn_list:
                     for info in positions:
-                       if ssn[-4] in info['text']:
+                       if ssn in info['text']:
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
                 for cc in cc_list:
                     for info in positions:
-                        if cc[-4] in info['text']:
+                        if cc in info['text']:
                             document.annotations.create("CC Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
                 for iban in iban_list:
@@ -69,7 +69,7 @@ class Detector(AddOn):
                             detect_PII = True
                 for phone in phone_list:
                         for info in positions:
-                            if phone[-4] in info['text']:
+                            if phone in info['text']:
                                 document.annotations.create(f"Phone # found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                                 detect_PII = True
                 for address in address_list:
