@@ -22,12 +22,10 @@ class Detector(AddOn):
                 iban_list = list(set(CR.iban_numbers(text)))
                 positions = document.get_page_position_json(page)
               
-                         
                 for ssn in ssn_list:
                     for info in positions:
                        if ssn[-4] in info['text']:
                             document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                            ssn_list.remove(ssn)
                             detect_PII = True
                             break
 
@@ -35,7 +33,6 @@ class Detector(AddOn):
                     for info in positions:
                         if cc[-4] in info['text']:
                             document.annotations.create("CC Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                            cc_list.remove(cc)
                             detect_PII = True
                             break
                 
@@ -60,7 +57,6 @@ class Detector(AddOn):
                         for info in positions:
                             if phone[-4] in info['text']:
                                 document.annotations.create(f"Phone # found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                                phone_list.remove(phone)
                                 detect_PII = True
                                 break
                 
