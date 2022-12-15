@@ -19,7 +19,7 @@ class Detector(AddOn):
             for page in range(1,document.pages+1):
                 # Extract a page of text
                 text=document.get_page_text(page)
-                parsed_text = CommonRegex(text)
+                parsed_text = CR(text)
                 # Generate mandatory PII Detection List
                 ssn_list = parsed_text.ssn_number
                 # ssn_list = list(set(CR.ssn_number(text)))
