@@ -15,6 +15,9 @@ class Detector(AddOn):
         detect_phone = self.data.get('phone')
         detect_zip = self.data.get('zip')
         
+        dob_detection = ['dob', 'DOB', 'DOB:', 'dob:']
+        ssn_detection = ['ssn', 'SSN', 'SSN:', 'ssn:'] 
+        
         for document in self.get_documents():
             for page in range(1,document.pages+1):
                 # Extract a page of text & parse it with CommonRegex
@@ -31,7 +34,7 @@ class Detector(AddOn):
                 email_list = []
                 phone_list = []
                 zipcode_list = []  
-
+                
                 # Pull page position JSON data. 
                 positions = document.get_page_position_json(page)
                 
@@ -48,7 +51,7 @@ class Detector(AddOn):
               
                 # Catches possible SSN fields if not auto-detected by regex. 
                 for info in positions:
-                    if "SSN" == info['text'] or "ssn" == info['text'] or "SSN:" == info['text'] or "ssn:" == info['text']:
+                    if any(info['text'] in ssn_detection):
                         document.annotations.create(f"Possible SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                         detect_PII = True
                 # Catches SSN values by regex detection if not caught by field detection
