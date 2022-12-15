@@ -21,7 +21,7 @@ class Detector(AddOn):
                 text=document.get_page_text(page)
                 
                 # Generate mandatory PII Detection List
-                ssn_list = list(set(CR.ssn_numbers(text)))
+                ssn_list = list(set(CR.ssn_number(text)))
                 cc_list = list(set(CR.credit_cards(text)))
                 # iban_list = list(set(CR.iban_numbers(text)))
 
