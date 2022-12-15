@@ -51,7 +51,7 @@ class Detector(AddOn):
               
                 # Catches possible SSN fields if not auto-detected by regex. 
                 for info in positions:
-                    if any(info['text'] in ssn_detection):
+                    if any(x in info['text'] for x in ssn_detection):
                         document.annotations.create(f"Possible SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                         detect_PII = True
                 # Catches SSN values by regex detection if not caught by field detection
