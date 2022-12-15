@@ -46,24 +46,30 @@ class Detector(AddOn):
                 if detect_zip is True:
                     zipcode_list = zipcode_list + list(set(parsed_text.zip_codes)) 
               
+                # Catches possible SSN fields if not auto-detected by regex. 
+                for info in positions:
+                    if "SSN" == info['text'] or "ssn" == info['text'] or "SSN:" == info['text'] or "ssn:" == info['text']:
+                        document.annotations.create(f"Possible SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                        detect_PII = True
+                # Catches SSN values by regex detection if not caught by field detection
                 for ssn in ssn_list:
                     for info in positions:
                        if ssn in info['text']:
                             document.annotations.create(f"SSN found",page-1,x1=info["x2"]-0.08,y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
-                       elif "SSN" == info['text'] or "ssn" == info['text'] or "SSN:" == info['text'] or "ssn:" == info['text']:
-                            document.annotations.create(f"Possible SSN found",page-1,x1=info["x2"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                            detect_PII = True
+                # Catches CC values by regex detection
                 for cc in cc_list:
                     for info in positions:
                         if cc[-4:] in info['text']:
                             document.annotations.create("CC Found", page-1, x1=info["x2"]-0.13,y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
+                # Catches emails by regex detection
                 for email in email_list:
                     for info in positions:
                         if email in info['text']:
                             document.annotations.create(f"Email found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
+                # Catches phone numbers by regex detection
                 for phone in phone_list:
                     for info in positions:
                         if phone in info['text']:
@@ -74,14 +80,17 @@ class Detector(AddOn):
                             document.annotations.create(f"Phone # found",page-1,x1=info['x2']-0.09,y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             positions.remove(info)
                             detect_PII = True
+                # Catches addresses by regex detection
                 for address in address_list:
                     document.annotations.create("Address found on this page", page-1, content=address)
                     detect_PII = True
+                # Catches zip codes by regex detection
                 for zipcode in zipcode_list:
                     for info in positions:
                         if zipcode in info['text']:
                             document.annotations.create(f"Zip Code Found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                
+        
+        # If the user selected to be alerted and PII was detected in the document, then an email alert will be sent. 
         if alert and detect_PII is True:
             self.send_mail("PII Detected", f"Personally identifying information was found in {document.canonical_url} please open the document to view more detail.")
        
