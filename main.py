@@ -17,15 +17,15 @@ class Detector(AddOn):
         
         for document in self.get_documents():
             for page in range(1,document.pages+1):
-                # Extract a page of text
+                # Extract a page of text & parse it with CommonRegex
                 text=document.get_page_text(page)
                 parsed_text = CommonRegex(text)
+
                 # Generate mandatory PII Detection List
                 ssn_list = parsed_text.ssn_number
                 # ssn_list = list(set(CR.ssn_number(text)))
                 cc_list = parsed_text.credit_cards
                 # cc_list = list(set(CR.credit_cards(text)))
-                # iban_list = list(set(CR.iban_numbers(text)))
 
                 # Pull page position JSON data. 
                 positions = document.get_page_position_json(page)
@@ -33,19 +33,13 @@ class Detector(AddOn):
                 # If the optional detection categories are marked, the lists are generated. 
                 if detect_address is True:
                     address_list = list(set(parsed_text.street_addresses)) + list(set(parsed_text.po_boxes))
-                    # address_list = address_list + CR.street_addresses(text) + CR.po_boxes(text)
-                    for i in address_list:
-                        print(i)
                 if detect_email is True:
                     email_list = list(set(parsed_text.emails))
-                    # email_list = email_list + list(set(CR.emails(text)))
                 if detect_phone is True:
-                    # phone_list = phone_list + CR.phones(text) + CR.phones_with_exts(text)
                     phone_list = list(set(parsed_text.phones)) + list(set(parsed_text.phones_with_exts))
                     phone_list = list(set(phone_list))
                 if detect_zip is True:
                     zipcode_list = parsed_text.zip_codes
-                    # zipcode_list = CR.zip_codes(text)
               
                 for ssn in ssn_list:
                     for info in positions:
@@ -57,11 +51,6 @@ class Detector(AddOn):
                         if cc[-4:] in info['text']:
                             document.annotations.create("CC Found", page-1, x1=info["x2"]-0.13,y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
-                """for iban in iban_list:
-                    for info in positions:
-                        if iban in info['text']:
-                            document.annotations.create("IBAN # Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
-                            detect_PII = True"""
                 for email in email_list:
                     for info in positions:
                         if email in info['text']:
