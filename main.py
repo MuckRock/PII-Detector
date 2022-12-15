@@ -2,7 +2,7 @@
 This is an add-on to search a document for PII create private annotations on what pages these exist on, it will additionally alert you to sensitive PII like social security numbers, IBANs, or credit card numbers by sending you an e-mail when one is detected.  
 """
 from documentcloud.addon import AddOn
-import commonregex as CR
+ from commonregex import CommonRegex
 import requests
 
 class Detector(AddOn):
@@ -19,7 +19,7 @@ class Detector(AddOn):
             for page in range(1,document.pages+1):
                 # Extract a page of text
                 text=document.get_page_text(page)
-                parsed_text = CR(text)
+                parsed_text = CommonRegex(text)
                 # Generate mandatory PII Detection List
                 ssn_list = parsed_text.ssn_number
                 # ssn_list = list(set(CR.ssn_number(text)))
