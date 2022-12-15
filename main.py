@@ -26,20 +26,25 @@ class Detector(AddOn):
                 # ssn_list = list(set(CR.ssn_number(text)))
                 cc_list = parsed_text.credit_cards
                 # cc_list = list(set(CR.credit_cards(text)))
+                
+                address_list = []
+                email_list = []
+                phone_list = []
+                zipcode_list = []  
 
                 # Pull page position JSON data. 
                 positions = document.get_page_position_json(page)
                 
                 # If the optional detection categories are marked, the lists are generated. 
                 if detect_address is True:
-                    address_list = list(set(parsed_text.street_addresses)) + list(set(parsed_text.po_boxes))
+                    address_list = address_list + list(set(parsed_text.street_addresses)) + list(set(parsed_text.po_boxes))
                 if detect_email is True:
-                    email_list = list(set(parsed_text.emails))
+                    email_list = email_list + list(set(parsed_text.emails))
                 if detect_phone is True:
-                    phone_list = list(set(parsed_text.phones)) + list(set(parsed_text.phones_with_exts))
+                    phone_list = phone_list + list(set(parsed_text.phones)) + list(set(parsed_text.phones_with_exts))
                     phone_list = list(set(phone_list))
                 if detect_zip is True:
-                    zipcode_list = parsed_text.zip_codes
+                    zipcode_list = zipcode_list + list(set(parsed_text.zip_codes)) 
               
                 for ssn in ssn_list:
                     for info in positions:
