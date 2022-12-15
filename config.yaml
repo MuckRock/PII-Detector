@@ -3,6 +3,7 @@ description: >-
   This add-on will detect PII in a document and automatically e-mail you when sensitive PII is detected. It will redact PII if selected, otherwise will just leave an annotation.
 type: object
 documents:
+  - query
   - selected
 properties: 
   email:
