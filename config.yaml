@@ -7,7 +7,7 @@ documents:
   - selected
 properties: 
   email:
-    title: Detect e-mails
+    title: Detect emails
     type: boolean
   phone:
     title: Detect phone numbers
@@ -18,6 +18,9 @@ properties:
   zip:
     title: Detect zipcodes
     type: boolean
+  dob:
+    title: Detect DOB
+    type: boolean
   alert:
-    title: Do you want an e-mail notification if PII was detected in a document?
+    title: Notify by email when PII is detected in a document
     type: boolean
