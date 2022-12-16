@@ -49,7 +49,11 @@ class Detector(AddOn):
                     phone_list = phone_list + list(set(parsed_text.phones))
                 if detect_zip is True:
                     zipcode_list = zipcode_list + list(set(parsed_text.zip_codes)) 
-              
+                
+                # Catches possible social security numbers by String detection in the page, the page is flagged for review. 
+                if text.contains("Social Security Number") or text.contains("social security number"):
+                    document.annotations.create(f"Possible SSN found",page-1) 
+                
                 # Catches possible SSN fields by field detection. If DOB detection is toggled on, it will field detect for DOB as well. 
                 for info in positions:
                     if any(x in info['text'] for x in ssn_detection):
@@ -64,14 +68,14 @@ class Detector(AddOn):
                 for ssn in ssn_list:
                     for info in positions:
                        if ssn in info['text']:
-                            document.annotations.create(f"SSN found",page-1,x1=info["x2"]-0.08,y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            document.annotations.create(f"SSN found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
 
                 # Catches CC values by regex detection
                 for cc in cc_list:
                     for info in positions:
                         if cc[-4:] in info['text']:
-                            document.annotations.create("CC Found", page-1, x1=info["x2"]-0.13,y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            document.annotations.create("CC Found", page-1, x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             detect_PII = True
 
                 # Catches emails by regex detection
@@ -89,7 +93,7 @@ class Detector(AddOn):
                             positions.remove(info)
                             detect_PII = True
                         elif phone[-4:] in info['text']:
-                            document.annotations.create(f"Phone # found",page-1,x1=info['x2']-0.09,y1=info["y1"],x2=info["x2"],y2=info["y2"])
+                            document.annotations.create(f"Phone # found",page-1,x1=info['x1'],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                             positions.remove(info)
                             detect_PII = True
 
