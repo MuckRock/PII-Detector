@@ -160,19 +160,19 @@ class Detector(AddOn):
                 try:
                     text_positions = document.get_page_position_json(page)
                     # If the optional detection categories are marked, the lists are generated.
-                    if self.data.get("address") is True:
+                    if self.data.get("address"):
                         self.address_detect(document, page, text)
-                    if self.data.get("credit_card") is True:
+                    if self.data.get("credit_card"):
                         self.credit_card_detect(
                             document, page, parsed_text, text_positions
                         )
-                    if self.data.get("email") is True:
+                    if self.data.get("email"):
                         self.email_detect(document, page, parsed_text, text_positions)
-                    if self.data.get("phone") is True:
+                    if self.data.get("phone"):
                         self.phone_detect(document, page, parsed_text, text_positions)
-                    if self.data.get("ssn") is True:
+                    if self.data.get("ssn"):
                         self.ssn_detect(document, page, parsed_text, text_positions)
-                    if self.data.get("zip") is True:
+                    if self.data.get("zip"):
                         self.zipcode_detect(document, page, parsed_text, text_positions)
                     self.set_message(
                         "Completed PII detection, click to review document"
@@ -184,7 +184,7 @@ class Detector(AddOn):
                     )
 
                 # Send email if PII detected and alert is true
-                if alert and self.detect_pii is True:
+                if alert and self.detect_pii:
                     self.send_mail(
                         "PII Detected",
                         "Personally identifying information was found in "
