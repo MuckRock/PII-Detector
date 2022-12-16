@@ -14,6 +14,9 @@ class Detector(AddOn):
     detect_pii = False
     def address_detect(self, document, page, text):
         """Catches addresses by regex detection"""
+        self.set_message(
+                        "Detecting addresses in the document..."
+                    )
         address_list = []
         address_list = (address_list+
                             list(set(CR.street_addresses(text)))
@@ -26,6 +29,9 @@ class Detector(AddOn):
 
     def credit_card_detect(self, document, page, parsed, positions):
         """Catches credit_card values by regex detection"""
+        self.set_message(
+                        "Detecting credit cards in the document..."
+                    )
         credit_card_list = parsed.credit_cards
         for credit_card in credit_card_list:
             for info in positions:
@@ -42,6 +48,9 @@ class Detector(AddOn):
 
     def email_detect(self, document, page, parsed, positions):
         """Catches emails by regex detection"""
+        self.set_message(
+                        "Detecting emails in the document..."
+                    )
         email_list = []
         email_list = email_list + list(set(parsed.emails))
         for email in email_list:
@@ -59,6 +68,9 @@ class Detector(AddOn):
 
     def phone_detect(self, document, page, parsed, positions):
         """Catches phone numbers by regex detection"""
+        self.set_message(
+                        "Detecting phone numbers in the document..."
+                    )
         phone_list = []
         phone_list = phone_list + list(set(parsed.phones))
         for phone in phone_list:
@@ -88,6 +100,9 @@ class Detector(AddOn):
 
     def ssn_detect(self, document, page, parsed, positions):
         """Catches possible SSNs using field detection and regex detection"""
+        self.set_message(
+                        "Detecting SSNs in the document..."
+                    )
         ssn_list = parsed.ssn_number
         ssn_detection = ["ssn", "SSN", "SSN:", "ssn:"]
         for info in positions:
@@ -117,6 +132,9 @@ class Detector(AddOn):
 
     def zipcode_detect(self, document, page, parsed, positions):
         """Catches zip codes by regex detection"""
+        self.set_message(
+                        "Detecting zipcodes in the document..."
+                    )
         zipcode_list = []
         zipcode_list = zipcode_list + list(set(parsed.zip_codes))
         for zipcode in zipcode_list:
