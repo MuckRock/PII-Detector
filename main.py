@@ -40,21 +40,6 @@ class Detector(AddOn):
                     )
                     self.detect_pii = True
 
-    def dob_detect(self, document, page, positions):
-        """Uses basic DOB field detection"""
-        dob_detection = ['dob', 'DOB', 'DOB:', 'dob:']
-        for info in positions:
-            if any(x in info["text"] for x in dob_detection):
-                document.annotations.create(
-                    "Possible DOB found",
-                    page - 1,
-                    x1=info["x1"],
-                    y1=info["y1"],
-                    x2=info["x2"],
-                    y2=info["y2"],
-                )
-                self.detect_pii = True
-
     def email_detect(self, document, page, parsed, positions):
         """Catches emails by regex detection"""
         email_list = []
@@ -166,8 +151,6 @@ class Detector(AddOn):
                         self.address_detect(document, page, text)
                     if self.data.get("credit_card") is True:
                         self.credit_card_detect(document, page, parsed_text, text_positions)
-                    if self.data.get("dob") is True:
-                        self.dob_detect(document, page, text)
                     if self.data.get("email") is True:
                         self.email_detect(document, page, parsed_text, text_positions)
                     if self.data.get("phone") is True:
@@ -181,8 +164,7 @@ class Detector(AddOn):
                         "The document you tried to run must be force re-processed in order for this Add-On to work"
                     )
 
-                # If the user selected to be alerted and PII is detected
-                # an email alert will be sent.
+                # Send email if PII detected and alert is true
                 if alert and self.detect_pii is True:
                     self.send_mail(
                         "PII Detected",
