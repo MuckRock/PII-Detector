@@ -177,6 +177,7 @@ class Detector(AddOn):
                         self.ssn_detect(document,page,parsed_text, text_positions)
                     if self.data.get("zip") is True:
                         self.zipcode_detect(document, page, parsed_text, text_positions)
+                    self.set_message("Completed PII detection, click to review document")
                 except json.decoder.JSONDecodeError:
                     self.set_message(
                         "The document you tried to run must be force re-processed in order for this Add-On to work"
