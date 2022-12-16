@@ -93,7 +93,7 @@ class Detector(AddOn):
                     for zipcode in zipcode_list:
                         for info in positions:
                             if zipcode in info['text']:
-                                document.annotations.create(f"Zip Code Found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"]
+                                document.annotations.create(f"Zip Code Found",page-1,x1=info["x1"],y1=info["y1"],x2=info["x2"],y2=info["y2"])
                 except (json.decoder.JSONDecodeError):
                     self.set_message("The document you tried to run must be force re-processed in order for this Add-On to detect PII") 
                 
