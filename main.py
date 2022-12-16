@@ -42,12 +42,11 @@ class Detector(AddOn):
                 
                 # If the optional detection categories are marked, the lists are generated. 
                 if detect_address is True:
-                    address_list = address_list + list(set(CR.street_addresses(text))) + list(set(CR.street_addresses(text)))
+                    address_list = address_list + list(set(CR.street_addresses(text)) + list(set(CR.po_boxes(text)))
                 if detect_email is True:
                     email_list = email_list + list(set(parsed_text.emails))
                 if detect_phone is True:
-                    phone_list = phone_list + list(set(CR.phones(text))) + list(set(CR.phones_with_exts(text)))
-                    phone_list = list(set(phone_list))
+                    phone_list = phone_list + list(set(parsed_text.phones))
                 if detect_zip is True:
                     zipcode_list = zipcode_list + list(set(parsed_text.zip_codes)) 
               
