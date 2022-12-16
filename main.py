@@ -20,124 +20,31 @@ class Detector(AddOn):
     def address_detect(self, document, page, text):
         """Catches addresses by regex detection"""
         self.set_message("Detecting addresses in the document...")
-        address_list = (
-            + list(set(CR.street_addresses(text)))
-            + list(set(CR.po_boxes(text)))
-        )
+        address_set = set(CR.street_addresses(text)) | set(CR.po_boxes(text))
         for address in address_list:
             document.annotations.create(
                 "Address found on this page", page - 1, content=address
             )
             self.detect_pii = True
 
-    def credit_card_detect(self, document, page, parsed, positions):
-        """Catches credit_card values by regex detection"""
-        self.set_message("Detecting credit cards in the document...")
-        credit_card_list = parsed.credit_cards
-        for credit_card in credit_card_list:
+    def detect(self, name, document, page, parsed, positions):
+        """Method to detect different types of regex"""
+        self.set_message(f"Detecting {name} information in the document...")
+        for word in set(parsed):
             for info in positions:
-                if credit_card[-4:] in info["text"]:
+                # is it important to do an in comparison here instead of equal?
+                if word in info["text"]:
                     document.annotations.create(
-                        "credit_card Found",
+                        f"{name} found",
                         page - 1,
                         x1=info["x1"],
                         y1=info["y1"],
                         x2=info["x2"],
                         y2=info["y2"],
                     )
-                    self.detect_pii = True
-
-    def email_detect(self, document, page, parsed, positions):
-        """Catches emails by regex detection"""
-        self.set_message("Detecting emails in the document...")
-        email_list = list(set(parsed.emails))
-        for email in email_list:
-            for info in positions:
-                if email in info["text"]:
-                    document.annotations.create(
-                        "Email found",
-                        page - 1,
-                        x1=info["x1"],
-                        y1=info["y1"],
-                        x2=info["x2"],
-                        y2=info["y2"],
-                    )
-                    self.detect_pii = True
-
-    def phone_detect(self, document, page, parsed, positions):
-        """Catches phone numbers by regex detection"""
-        self.set_message("Detecting phone numbers in the document...")
-        phone_list = list(set(parsed.phones))
-        for phone in phone_list:
-            for info in positions:
-                if phone in info["text"]:
-                    document.annotations.create(
-                        "Phone # found",
-                        page - 1,
-                        x1=info["x1"],
-                        y1=info["y1"],
-                        x2=info["x2"],
-                        y2=info["y2"],
-                    )
+                    # remove from positions to not create multiple annotations
+                    # on one word
                     positions.remove(info)
-                    self.detect_pii = True
-                elif phone[-4:] in info["text"]:
-                    document.annotations.create(
-                        "Phone # found",
-                        page - 1,
-                        x1=info["x1"],
-                        y1=info["y1"],
-                        x2=info["x2"],
-                        y2=info["y2"],
-                    )
-                    positions.remove(info)
-                    self.detect_pii = True
-
-    def ssn_detect(self, document, page, parsed, positions):
-        """Catches possible SSNs using field detection and regex detection"""
-        self.set_message("Detecting SSNs in the document...")
-        ssn_list = parsed.ssn_number
-        ssn_detection = ["ssn", "SSN", "SSN:", "ssn:"]
-        for info in positions:
-            if any(x in info["text"] for x in ssn_detection):
-                document.annotations.create(
-                    "Possible SSN found",
-                    page - 1,
-                    x1=info["x1"],
-                    y1=info["y1"],
-                    x2=info["x2"],
-                    y2=info["y2"],
-                )
-                self.detect_pii = True
-        # Catches SSN values by regex detection.
-        for ssn in ssn_list:
-            for info in positions:
-                if ssn in info["text"]:
-                    document.annotations.create(
-                        "SSN found",
-                        page - 1,
-                        x1=info["x1"],
-                        y1=info["y1"],
-                        x2=info["x2"],
-                        y2=info["y2"],
-                    )
-                    self.detect_pii = True
-
-    def zipcode_detect(self, document, page, parsed, positions):
-        """Catches zip codes by regex detection"""
-        self.set_message("Detecting zipcodes in the document...")
-        zipcode_list = list(set(parsed.zip_codes))
-        for zipcode in zipcode_list:
-            for info in positions:
-                if zipcode in info["text"]:
-                    document.annotations.create(
-                        "Zip Code Found",
-                        page - 1,
-                        x1=info["x1"],
-                        y1=info["y1"],
-                        x2=info["x2"],
-                        y2=info["y2"],
-                    )
                     self.detect_pii = True
 
     def main(self):
@@ -164,17 +71,51 @@ class Detector(AddOn):
                     if self.data.get("address"):
                         self.address_detect(document, page, text)
                     if self.data.get("credit_card"):
-                        self.credit_card_detect(
-                            document, page, parsed_text, text_positions
+                        credit_card_last4 = [c[-4:] for c in parsed_text.credit_cards]
+                        self.detect(
+                            "Credit card",
+                            document,
+                            page,
+                            credit_card_last4,
+                            text_positions,
                         )
                     if self.data.get("email"):
-                        self.email_detect(document, page, parsed_text, text_positions)
+                        self.detect(
+                            "Email", document, page, parsed_text.emails, text_positions
+                        )
                     if self.data.get("phone"):
-                        self.phone_detect(document, page, parsed_text, text_positions)
+                        phones = parsed_text.phones
+                        phones_last4 = [p[-4:] for p in phones]
+                        self.detect(
+                            "Phone number",
+                            document,
+                            page,
+                            phones + phones_last4,
+                            text_positions,
+                        )
                     if self.data.get("ssn"):
-                        self.ssn_detect(document, page, parsed_text, text_positions)
+                        self.detect(
+                            "SSN",
+                            document,
+                            page,
+                            parsed_text.ssn_number,
+                            text_positions,
+                        )
+                        self.detect(
+                            "Possible SSN",
+                            document,
+                            page,
+                            ["SSN", "ssn"],
+                            text_positions,
+                        )
                     if self.data.get("zip"):
-                        self.zipcode_detect(document, page, parsed_text, text_positions)
+                        self.detect(
+                            "Zip code",
+                            document,
+                            page,
+                            parsed_text.zip_codes,
+                            text_positions,
+                        )
                     self.set_message(
                         "Completed PII detection, click to review document"
                     )
