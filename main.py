@@ -159,6 +159,12 @@ class Detector(AddOn):
                 # So they will need to be re-processed before the Add-On can run.
                 try:
                     text_positions = document.get_page_position_json(page)
+                except json.decoder.JSONDecodeError:
+                    self.set_message(
+                        "The document you tried to run must be force re-processed in "
+                        "order for this Add-On to work"
+                    )
+                else:
                     # If the optional detection categories are marked, the lists are generated.
                     if self.data.get("address"):
                         self.address_detect(document, page, text)
@@ -176,11 +182,6 @@ class Detector(AddOn):
                         self.zipcode_detect(document, page, parsed_text, text_positions)
                     self.set_message(
                         "Completed PII detection, click to review document"
-                    )
-                except json.decoder.JSONDecodeError:
-                    self.set_message(
-                        "The document you tried to run must be force re-processed in "
-                        "order for this Add-On to work"
                     )
 
                 # Send email if PII detected and alert is true
