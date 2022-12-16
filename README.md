@@ -5,8 +5,7 @@ One can provide this add-on a set of documents and it will search through the pa
 
 - Social Security Numbers
 - Credit Card numbers
-- IBANs
 - Phone numbers
 - Emails 
-- Addresses
-
+- Street addresses and po boxes
+- Zip codes
