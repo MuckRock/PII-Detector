@@ -18,6 +18,9 @@ properties:
   address:
     title: Detect addresses
     type: boolean
+  ssn:
+    title: Detect SSNs
+    type: boolean
   zip:
     title: Detect zipcodes
     type: boolean
