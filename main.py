@@ -5,22 +5,27 @@ It will additionally alert you to sensitive PII like social security numbers or 
 by sending you an e-mail when one is detected.
 """
 import json
-import crim as CR
+
 from commonregex import CommonRegex
 from documentcloud.addon import AddOn
 
+import crim as CR
+
+
 class Detector(AddOn):
     """Detector AddOn class which has methods you can call"""
+
     detect_pii = False
+
     def address_detect(self, document, page, text):
         """Catches addresses by regex detection"""
-        self.set_message(
-                        "Detecting addresses in the document..."
-                    )
+        self.set_message("Detecting addresses in the document...")
         address_list = []
-        address_list = (address_list+
-                            list(set(CR.street_addresses(text)))
-                            +list(set(CR.po_boxes(text))))
+        address_list = (
+            address_list
+            + list(set(CR.street_addresses(text)))
+            + list(set(CR.po_boxes(text)))
+        )
         for address in address_list:
             document.annotations.create(
                 "Address found on this page", page - 1, content=address
@@ -29,9 +34,7 @@ class Detector(AddOn):
 
     def credit_card_detect(self, document, page, parsed, positions):
         """Catches credit_card values by regex detection"""
-        self.set_message(
-                        "Detecting credit cards in the document..."
-                    )
+        self.set_message("Detecting credit cards in the document...")
         credit_card_list = parsed.credit_cards
         for credit_card in credit_card_list:
             for info in positions:
@@ -48,9 +51,7 @@ class Detector(AddOn):
 
     def email_detect(self, document, page, parsed, positions):
         """Catches emails by regex detection"""
-        self.set_message(
-                        "Detecting emails in the document..."
-                    )
+        self.set_message("Detecting emails in the document...")
         email_list = []
         email_list = email_list + list(set(parsed.emails))
         for email in email_list:
@@ -68,9 +69,7 @@ class Detector(AddOn):
 
     def phone_detect(self, document, page, parsed, positions):
         """Catches phone numbers by regex detection"""
-        self.set_message(
-                        "Detecting phone numbers in the document..."
-                    )
+        self.set_message("Detecting phone numbers in the document...")
         phone_list = []
         phone_list = phone_list + list(set(parsed.phones))
         for phone in phone_list:
@@ -100,9 +99,7 @@ class Detector(AddOn):
 
     def ssn_detect(self, document, page, parsed, positions):
         """Catches possible SSNs using field detection and regex detection"""
-        self.set_message(
-                        "Detecting SSNs in the document..."
-                    )
+        self.set_message("Detecting SSNs in the document...")
         ssn_list = parsed.ssn_number
         ssn_detection = ["ssn", "SSN", "SSN:", "ssn:"]
         for info in positions:
@@ -116,7 +113,7 @@ class Detector(AddOn):
                     y2=info["y2"],
                 )
                 self.detect_pii = True
-        #Catches SSN values by regex detection.
+        # Catches SSN values by regex detection.
         for ssn in ssn_list:
             for info in positions:
                 if ssn in info["text"]:
@@ -132,9 +129,7 @@ class Detector(AddOn):
 
     def zipcode_detect(self, document, page, parsed, positions):
         """Catches zip codes by regex detection"""
-        self.set_message(
-                        "Detecting zipcodes in the document..."
-                    )
+        self.set_message("Detecting zipcodes in the document...")
         zipcode_list = []
         zipcode_list = zipcode_list + list(set(parsed.zip_codes))
         for zipcode in zipcode_list:
@@ -168,26 +163,32 @@ class Detector(AddOn):
                     if self.data.get("address") is True:
                         self.address_detect(document, page, text)
                     if self.data.get("credit_card") is True:
-                        self.credit_card_detect(document, page, parsed_text, text_positions)
+                        self.credit_card_detect(
+                            document, page, parsed_text, text_positions
+                        )
                     if self.data.get("email") is True:
                         self.email_detect(document, page, parsed_text, text_positions)
                     if self.data.get("phone") is True:
                         self.phone_detect(document, page, parsed_text, text_positions)
-                    if self.data.get("ssn") is True: 
-                        self.ssn_detect(document,page,parsed_text, text_positions)
+                    if self.data.get("ssn") is True:
+                        self.ssn_detect(document, page, parsed_text, text_positions)
                     if self.data.get("zip") is True:
                         self.zipcode_detect(document, page, parsed_text, text_positions)
-                    self.set_message("Completed PII detection, click to review document")
+                    self.set_message(
+                        "Completed PII detection, click to review document"
+                    )
                 except json.decoder.JSONDecodeError:
                     self.set_message(
-                        "The document you tried to run must be force re-processed in order for this Add-On to work"
+                        "The document you tried to run must be force re-processed in "
+                        "order for this Add-On to work"
                     )
 
                 # Send email if PII detected and alert is true
                 if alert and self.detect_pii is True:
                     self.send_mail(
                         "PII Detected",
-                        f"Personally identifying information was found in {document.canonical_url} please open the document to view more detail.",
+                        "Personally identifying information was found in "
+                        f"{document.canonical_url} please open the document to view more detail.",
                     )
 
 
