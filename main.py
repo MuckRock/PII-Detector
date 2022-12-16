@@ -5,6 +5,7 @@ from documentcloud.addon import AddOn
 from commonregex import CommonRegex
 import crim as CR
 import requests
+import json
 
 class Detector(AddOn):
     def main(self):
