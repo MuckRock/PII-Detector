@@ -42,7 +42,7 @@ class Detector(AddOn):
                 
                 # If the optional detection categories are marked, the lists are generated. 
                 if detect_address is True:
-                    address_list = address_list + list(set(CR.street_addresses(text)) + list(set(CR.po_boxes(text)))
+                    address_list = address_list + list(set(CR.street_addresses(text))) + list(set(CR.po_boxes(text)))
                 if detect_email is True:
                     email_list = email_list + list(set(parsed_text.emails))
                 if detect_phone is True:
