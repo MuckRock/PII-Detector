@@ -1,3 +1,4 @@
 python-documentcloud==3.1.4
 requests
 https://github.com/madisonmay/CommonRegex/archive/refs/heads/master.zip
+commonregex-improved
