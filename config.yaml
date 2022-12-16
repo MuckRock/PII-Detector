@@ -6,6 +6,9 @@ documents:
   - query
   - selected
 properties: 
+  credit_card:
+    title: Detect credit cards
+    type: boolean
   email:
     title: Detect emails
     type: boolean
