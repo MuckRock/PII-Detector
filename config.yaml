@@ -5,7 +5,10 @@ type: object
 documents:
   - query
   - selected
-properties: 
+properties:
+  address:
+    title: Detect addresses
+    type: boolean
   credit_card:
     title: Detect credit cards
     type: boolean
@@ -15,17 +18,11 @@ properties:
   phone:
     title: Detect phone numbers
     type: boolean
-  address:
-    title: Detect addresses
-    type: boolean
   ssn:
     title: Detect SSNs
     type: boolean
   zip:
     title: Detect zipcodes
-    type: boolean
-  dob:
-    title: Detect DOB
     type: boolean
   alert:
     title: Notify by email when PII is detected in a document
