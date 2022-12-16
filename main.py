@@ -172,6 +172,8 @@ class Detector(AddOn):
                         self.email_detect(document, page, parsed_text, text_positions)
                     if self.data.get("phone") is True:
                         self.phone_detect(document, page, parsed_text, text_positions)
+                    if self.data.get("ssn") is True: 
+                        self.ssn_detect(document,page,parsed_text, text_positions)
                     if self.data.get("zip") is True:
                         self.zipcode_detect(document, page, parsed_text, text_positions)
                 except json.decoder.JSONDecodeError:
