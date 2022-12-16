@@ -47,9 +47,24 @@ class Detector(AddOn):
                     positions.remove(info)
                     self.detect_pii = True
 
+    data_types = [
+        (
+            "credit card",
+            "Credit card",
+            "credit_cards",
+            lambda x: [c[-4:] for c in x],
+        ),
+        ("email", "Email", "emails", lambda x: x),
+        ("phone", "Phone number", "phones", lambda x: x + [p[-4:] for p in x]),
+        ("ssn", "SSN", "ssn_number", lambda x: x),
+        ("ssn", "Posible SSN", "", lambda x: ["SSN", "ssn"]),
+        ("zip", "Zip code", "zip_codes", lambda x: x),
+    ]
+
     def main(self):
         """Will run the detection methods based on selection by the user"""
         alert = self.data.get("alert")
+
         for document in self.get_documents():
             for page in range(1, document.pages + 1):
                 # Extract a page of text & parse it with CommonRegex
@@ -70,52 +85,10 @@ class Detector(AddOn):
                     # If the optional detection categories are marked, the lists are generated.
                     if self.data.get("address"):
                         self.address_detect(document, page, text)
-                    if self.data.get("credit_card"):
-                        credit_card_last4 = [c[-4:] for c in parsed_text.credit_cards]
-                        self.detect(
-                            "Credit card",
-                            document,
-                            page,
-                            credit_card_last4,
-                            text_positions,
-                        )
-                    if self.data.get("email"):
-                        self.detect(
-                            "Email", document, page, parsed_text.emails, text_positions
-                        )
-                    if self.data.get("phone"):
-                        phones = parsed_text.phones
-                        phones_last4 = [p[-4:] for p in phones]
-                        self.detect(
-                            "Phone number",
-                            document,
-                            page,
-                            phones + phones_last4,
-                            text_positions,
-                        )
-                    if self.data.get("ssn"):
-                        self.detect(
-                            "SSN",
-                            document,
-                            page,
-                            parsed_text.ssn_number,
-                            text_positions,
-                        )
-                        self.detect(
-                            "Possible SSN",
-                            document,
-                            page,
-                            ["SSN", "ssn"],
-                            text_positions,
-                        )
-                    if self.data.get("zip"):
-                        self.detect(
-                            "Zip code",
-                            document,
-                            page,
-                            parsed_text.zip_codes,
-                            text_positions,
-                        )
+                    for data, name, attr, transform in self.data_types:
+                        if self.data.get(data):
+                            parsed = transform(getattr(parsed_text, attr, None))
+                            self.detect(name, document, page, parsed, text_positions)
                     self.set_message(
                         "Completed PII detection, click to review document"
                     )
