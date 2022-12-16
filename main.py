@@ -20,9 +20,7 @@ class Detector(AddOn):
     def address_detect(self, document, page, text):
         """Catches addresses by regex detection"""
         self.set_message("Detecting addresses in the document...")
-        address_list = []
         address_list = (
-            address_list
             + list(set(CR.street_addresses(text)))
             + list(set(CR.po_boxes(text)))
         )
@@ -52,8 +50,7 @@ class Detector(AddOn):
     def email_detect(self, document, page, parsed, positions):
         """Catches emails by regex detection"""
         self.set_message("Detecting emails in the document...")
-        email_list = []
-        email_list = email_list + list(set(parsed.emails))
+        email_list = list(set(parsed.emails))
         for email in email_list:
             for info in positions:
                 if email in info["text"]:
@@ -70,8 +67,7 @@ class Detector(AddOn):
     def phone_detect(self, document, page, parsed, positions):
         """Catches phone numbers by regex detection"""
         self.set_message("Detecting phone numbers in the document...")
-        phone_list = []
-        phone_list = phone_list + list(set(parsed.phones))
+        phone_list = list(set(parsed.phones))
         for phone in phone_list:
             for info in positions:
                 if phone in info["text"]:
@@ -130,8 +126,7 @@ class Detector(AddOn):
     def zipcode_detect(self, document, page, parsed, positions):
         """Catches zip codes by regex detection"""
         self.set_message("Detecting zipcodes in the document...")
-        zipcode_list = []
-        zipcode_list = zipcode_list + list(set(parsed.zip_codes))
+        zipcode_list = list(set(parsed.zip_codes))
         for zipcode in zipcode_list:
             for info in positions:
                 if zipcode in info["text"]:
