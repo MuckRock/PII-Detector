@@ -1,4 +1,3 @@
-
 name: Run Add-On
 on: repository_dispatch
 
@@ -7,4 +6,3 @@ jobs:
     uses: MuckRock/documentcloud-addon-workflows/.github/workflows/run-addon.yml@v1
     with:
       timeout: 360
-      
