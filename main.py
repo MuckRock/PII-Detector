@@ -42,7 +42,7 @@ class Detector(AddOn):
                     # remove from positions to not create multiple annotations
                     # on one word
                     positions.remove(info)
-                    if document.canonical_url not in document_detected:
+                    if document.canonical_url not in self.document_detected:
                         document_detected.append(document.canonical_url)
 
     data_types = [
