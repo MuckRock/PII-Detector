@@ -1,8 +1,6 @@
 """
 This is an add-on to search a document for PII.
 It will create private annotations on pages PII exists on.
-It will additionally alert you to sensitive PII like social security numbers or credit card numbers
-by sending you an e-mail when one is detected.
 """
 import json
 
@@ -14,8 +12,8 @@ import crim as CR
 
 class Detector(AddOn):
     """Detector AddOn class which has methods you can call"""
-
-    detect_pii = False
+    document_detected = []
+    document_failures = []
 
     def address_detect(self, document, page, text):
         """Catches addresses by regex detection"""
@@ -25,7 +23,6 @@ class Detector(AddOn):
             document.annotations.create(
                 "Address found on this page", page - 1, content=address
             )
-            self.detect_pii = True
 
     def detect(self, name, document, page, parsed, positions):
         """Method to detect different types of regex"""
@@ -45,7 +42,8 @@ class Detector(AddOn):
                     # remove from positions to not create multiple annotations
                     # on one word
                     positions.remove(info)
-                    self.detect_pii = True
+                    if document.canonical_url not in document_detected:
+                        document_detected.append(document.canonical_url)
 
     data_types = [
         # This contains the information needed to check for each type of PII
@@ -56,7 +54,7 @@ class Detector(AddOn):
         # * Attribute name - The attribute name that corresponds to this data
         #   on the parsed text object returned from the common regex parser
         # * Transformer - Function which transform the list of items returned
-        #   by the commen regex parser before checking them against the word
+        #   by the common regex parser before checking them against the word
         #   position file
         (
             "credit card",
@@ -74,7 +72,6 @@ class Detector(AddOn):
     def main(self):
         """Will run the detection methods based on selection by the user"""
         alert = self.data.get("alert")
-
         for document in self.get_documents():
             for page in range(1, document.pages + 1):
                 # Extract a page of text & parse it with CommonRegex
@@ -87,10 +84,7 @@ class Detector(AddOn):
                 try:
                     text_positions = document.get_page_position_json(page)
                 except json.decoder.JSONDecodeError:
-                    self.set_message(
-                        "The document you tried to run must be force re-processed in "
-                        "order for this Add-On to work"
-                    )
+                    document_failures.append(document.canonical_url) 
                 else:
                     # If the optional detection categories are marked, the lists are generated.
                     if self.data.get("address"):
@@ -99,18 +93,29 @@ class Detector(AddOn):
                         if self.data.get(data):
                             parsed = transform(getattr(parsed_text, attr, None))
                             self.detect(name, document, page, parsed, text_positions)
-                    self.set_message(
-                        "Completed PII detection, click to review document"
-                    )
+                    self.set_message("Completed PII detection")
 
-                # Send email if PII detected and alert is true
-                if alert and self.detect_pii:
-                    self.send_mail(
-                        "PII Detected",
-                        "Personally identifying information was found in "
-                        f"{document.canonical_url} please open the document to view more detail.",
-                    )
-
+                # Send email if alert is true
+                if alert:
+                    if document_detected:
+                        detected_prefix = "PII Detected in the following documents:\n"
+                        detected_list = '\n'.join(document_detected)
+                        detected_msg = detected_prefix + detected_list
+                    else: 
+                        detected_msg = "PII of the selected types were not detected in any of the documents selected \n" 
+                   
+                    if document_failures:
+                        failure_prefix = 
+                        "\nThe following documents do not have a word position file. \n"\
+                        "You will need to select Edit -> Force Reprocess "\
+                        "to generate the word position file "\
+                        "and then run the Add-On again. \n"
+                        failure_list = '\n'.join(document_failures)
+                        failure_msg = failure_prefix + failure_list
+                    else: 
+                        failure_msg = "No documents failed to process."
+                    
+                    self.send_mail(detected_msg + failure_msg)
 
 if __name__ == "__main__":
     Detector().main()
