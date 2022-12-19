@@ -114,7 +114,7 @@ class Detector(AddOn):
                     else: 
                         failure_msg = "No documents failed to process."
                     
-                    self.send_mail(detected_msg + failure_msg)
+                    self.send_mail("PII Detection Summary", detected_msg + failure_msg)
 
 if __name__ == "__main__":
     Detector().main()
