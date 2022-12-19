@@ -112,7 +112,7 @@ class Detector(AddOn):
                         failure_list = '\n'.join(self.document_failures)
                         failure_msg = failure_prefix + failure_list
                     else: 
-                        failure_msg = "No documents failed to process."
+                        failure_msg = "\nNo documents failed to process."
                     
                     self.send_mail("PII Detection Summary", detected_msg + failure_msg)
 
