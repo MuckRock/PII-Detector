@@ -94,27 +94,26 @@ class Detector(AddOn):
                             parsed = transform(getattr(parsed_text, attr, None))
                             self.detect(name, document, page, parsed, text_positions)
                     self.set_message("Completed PII detection")
-
-                # Send email if alert is true
-                if alert:
-                    if self.document_detected:
-                        detected_prefix = "PII Detected in the following documents:\n"
-                        detected_list = '\n'.join(self.document_detected)
-                        detected_msg = detected_prefix + detected_list
-                    else: 
-                        detected_msg = "PII of the selected types were not detected in any of the documents selected \n" 
+        
+        # Send email if alert is true
+        if alert:
+            if self.document_detected:
+                detected_prefix = "PII Detected in the following documents:\n"
+                detected_list = '\n'.join(self.document_detected)
+                detected_msg = detected_prefix + detected_list
+            else: 
+                detected_msg = "PII of the selected types were not detected in any of the documents selected \n" 
                    
-                    if self.document_failures:
-                        failure_prefix = "\nThe following documents do not have a word position file. \n"\
-                        "You will need to select Edit -> Force Reprocess "\
-                        "to generate the word position file "\
-                        "and then run the Add-On again. \n"
-                        failure_list = '\n'.join(self.document_failures)
-                        failure_msg = failure_prefix + failure_list
-                    else: 
-                        failure_msg = "\nNo documents failed to process."
-                    
-                    self.send_mail("PII Detection Summary", detected_msg + failure_msg)
+            if self.document_failures:
+                failure_prefix = "\nThe following documents do not have a word position file. \n"\
+                                 "You will need to select Edit -> Force Reprocess "\
+                                 "to generate the word position file "\
+                                 "and then run the Add-On again. \n"
+                failure_list = '\n'.join(self.document_failures)
+                failure_msg = failure_prefix + failure_list
+            else: 
+                failure_msg = "\nNo documents failed to process."
+            self.send_mail("PII Detection Summary", detected_msg + failure_msg)
 
 if __name__ == "__main__":
     Detector().main()
