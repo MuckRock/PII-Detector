@@ -48,6 +48,16 @@ class Detector(AddOn):
                     self.detect_pii = True
 
     data_types = [
+        # This contains the information needed to check for each type of PII
+        # There is one 4-tuple for each type of data:
+        # * Data name - the name of the boolean flag to fetch from self.data to enable
+        #   this check
+        # * Name - used in messages and emails to the user about this data
+        # * Attribute name - The attribute name that corresponds to this data
+        #   on the parsed text object returned from the common regex parser
+        # * Transformer - Function which transform the list of items returned
+        #   by the commen regex parser before checking them against the word
+        #   position file
         (
             "credit card",
             "Credit card",
