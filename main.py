@@ -86,7 +86,8 @@ class Detector(AddOn):
                 try:
                     text_positions = document.get_page_position_json(page)
                 except json.decoder.JSONDecodeError:
-                    self.document_failures.append(document.canonical_url) 
+                    if document.canonical_url not in self.document_failures:
+                        self.document_failures.append(document.canonical_url) 
                 else:
                     # If the optional detection categories are marked, the lists are generated.
                     if self.data.get("address"):
