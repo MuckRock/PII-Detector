@@ -104,7 +104,7 @@ class Detector(AddOn):
                 detected_list = '\n'.join(self.document_detected)
                 detected_msg = detected_prefix + detected_list
             else: 
-                detected_msg = "PII of the selected types were not detected in any of the documents selected \n" 
+                detected_msg = "PII of the selected types were not detected in any of the documents selected. \n" 
                    
             if self.document_failures:
                 failure_prefix = "\nThe following documents do not have a word position file. \n"\
