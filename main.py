@@ -23,6 +23,8 @@ class Detector(AddOn):
             document.annotations.create(
                 "Address found on this page", page - 1, content=address
             )
+            if document.canonical_url not in self.document_detected:
+                self.document_detected.append(document.canonical_url)
 
     def detect(self, name, document, page, parsed, positions):
         """Method to detect different types of regex"""
@@ -93,8 +95,7 @@ class Detector(AddOn):
                         if self.data.get(data):
                             parsed = transform(getattr(parsed_text, attr, None))
                             self.detect(name, document, page, parsed, text_positions)
-                    self.set_message("Completed PII detection")
-        
+        self.set_message("Completed PII detection")
         # Send email if alert is true
         if alert:
             if self.document_detected:
