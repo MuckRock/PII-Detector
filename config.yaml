@@ -27,3 +27,6 @@ properties:
   alert:
     title: Notify by email when PII is detected in a document
     type: boolean
+eventOptions:
+  events:
+    - upload
