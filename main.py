@@ -15,7 +15,6 @@ class Detector(AddOn):
 
     document_detected = []
     document_failures = []
-
     def address_detect(self, document, page, text):
         """Catches addresses by regex detection"""
         self.set_message("Detecting addresses in the document...")
@@ -26,6 +25,10 @@ class Detector(AddOn):
             )
             if document.canonical_url not in self.document_detected:
                 self.document_detected.append(document.canonical_url)
+            if self.data.get("project_id"):
+                project = self.client.projects.get(self.data.get("project_id"))
+                if document not in project.document_list:
+                    project.document_list.append(document)
 
     def detect(self, name, document, page, parsed, positions):
         """Method to detect different types of regex"""
@@ -47,6 +50,10 @@ class Detector(AddOn):
                     positions.remove(info)
                     if document.canonical_url not in self.document_detected:
                         self.document_detected.append(document.canonical_url)
+                    if self.data.get("project_id"):
+                        project = self.client.projects.get(self.data.get("project_id"))
+                        if document not in project.document_list:
+                            project.document_list.append(document)
 
     data_types = [
         # This contains the information needed to check for each type of PII
