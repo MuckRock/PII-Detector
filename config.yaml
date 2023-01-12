@@ -27,6 +27,9 @@ properties:
   alert:
     title: Notify by email when PII is detected in a document
     type: boolean
+   project_id:
+    title: If you'd like to add documents where PII is detected to a project, provide the Project ID Here. 
+    type: integer
 eventOptions:
   events:
     - upload
