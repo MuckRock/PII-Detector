@@ -29,6 +29,7 @@ class Detector(AddOn):
                 project = self.client.projects.get(self.data.get("project_id"))
                 if document not in project.document_list:
                     project.document_list.append(document)
+                    project.put()
 
     def detect(self, name, document, page, parsed, positions):
         """Method to detect different types of regex"""
@@ -54,6 +55,7 @@ class Detector(AddOn):
                         project = self.client.projects.get(self.data.get("project_id"))
                         if document not in project.document_list:
                             project.document_list.append(document)
+                            project.put()
 
     data_types = [
         # This contains the information needed to check for each type of PII
