@@ -14,8 +14,7 @@ class Detector(AddOn):
     """Detector AddOn class which has methods you can call"""
 
     document_detected = []
-    document_failures = [] 
-  
+    document_failures = []
     def address_detect(self, document, page, text):
         """Catches addresses by regex detection"""
         self.set_message("Detecting addresses in the document...")
