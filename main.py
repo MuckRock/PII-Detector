@@ -12,7 +12,6 @@ import crim as CR
 
 class Detector(AddOn):
     """Detector AddOn class which has methods you can call"""
-
     document_detected = []
     document_failures = []
     def address_detect(self, document, page, text):
@@ -21,7 +20,7 @@ class Detector(AddOn):
         address_set = set(CR.street_addresses(text)) | set(CR.po_boxes(text))
         for address in address_list:
             document.annotations.create(
-                "Address found on this page", page - 1, content=address
+                "Address found on this page", page - 1, content=address, access=self.data.get('access')
             )
             if document.canonical_url not in self.document_detected:
                 self.document_detected.append(document.canonical_url)
@@ -41,6 +40,7 @@ class Detector(AddOn):
                     document.annotations.create(
                         f"{name} found",
                         page - 1,
+                        access=self.data.get('access'),
                         x1=info["x1"],
                         y1=info["y1"],
                         x2=info["x2"],

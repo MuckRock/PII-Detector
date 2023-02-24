@@ -30,6 +30,10 @@ properties:
   project_id:
     title: If you'd like to add documents where PII is detected to a project, provide the Project ID Here. 
     type: integer
+  access:
+    title: Access level of the annotations (public, private, organization)
+    type: string
+    default: private
 eventOptions:
   events:
     - upload
