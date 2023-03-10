@@ -18,7 +18,7 @@ class Detector(AddOn):
         """Catches addresses by regex detection"""
         self.set_message("Detecting addresses in the document...")
         address_set = set(CR.street_addresses(text)) | set(CR.po_boxes(text))
-        for address in address_list:
+        for address in address_set:
             document.annotations.create(
                 "Address found on this page", page - 1, content=address, access=self.data.get('access')
             )
