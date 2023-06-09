@@ -36,7 +36,7 @@ class Detector(AddOn):
         for word in set(parsed):
             for info in positions:
                 # is it important to do an in comparison here instead of equal?
-                if word in info["text"] and info["x1"]>=0.0 and info["y1"]>=0.0 and info["x2"]>=0.0 and info["y2"]>=0.0:
+                if word in info["text"] and 1>=info["x1"]>=0.0 and 1>=info["y1"]>=0.0 and 1>=info["x2"]>=0.0 and 1>=info["y2"]>=0.0:
                     document.annotations.create(
                         f"{name} found",
                         page - 1,
