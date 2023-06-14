@@ -34,6 +34,9 @@ properties:
     title: Access level of the annotations (public, private, organization)
     type: string
     default: private
+categories:
+  - extraction
+  - monitor
 eventOptions:
   events:
     - upload
