@@ -1,6 +1,7 @@
 title: PII Detector
 description: >-
   This add-on will detect PII in a document, annotate where, and automatically e-mail you when sensitive PII is detected if you choose that option.
+instructions: ''
 type: object
 documents:
   - query
