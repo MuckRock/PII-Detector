@@ -83,7 +83,7 @@ class Detector(AddOn):
 
     def main(self):
         """Will run the detection methods based on selection by the user"""
-        if not self.documents:
+        if self.get_document_count() is None:
             self.set_message("Please select at least one document.")
             return
         alert = self.data.get("alert")
