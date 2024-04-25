@@ -3,15 +3,17 @@ This is an add-on to search a document for PII.
 It will create private annotations on pages PII exists on.
 """
 import json
-
+import logging
 from commonregex import CommonRegex
 from documentcloud.addon import AddOn
+from documentcloud.exceptions import APIError
 
 import crim as CR
 
 
 class Detector(AddOn):
     """Detector AddOn class which has methods you can call"""
+    logging.basicConfig(level=logging.ERROR)
     document_detected = []
     document_failures = []
     def address_detect(self, document, page, text):
@@ -19,9 +21,13 @@ class Detector(AddOn):
         self.set_message("Detecting addresses in the document...")
         address_set = set(CR.street_addresses(text)) | set(CR.po_boxes(text))
         for address in address_set:
-            document.annotations.create(
-                "Address found on this page", page - 1, content=address, access=self.data.get('access')
-            )
+            try:
+                document.annotations.create(
+                    "Address found on this page", page - 1, content=address, access=self.data.get('access')
+                )
+            except APIError as e:
+                logging.error("API Error: %s", e)
+
             if document.canonical_url not in self.document_detected:
                 self.document_detected.append(document.canonical_url)
             if self.data.get("project_id"):
@@ -37,15 +43,19 @@ class Detector(AddOn):
             for info in positions:
                 # is it important to do an in comparison here instead of equal?
                 if word in info["text"] and 1>=info["x1"]>=0.0 and 1>=info["y1"]>=0.0 and 1>=info["x2"]>=0.0 and 1>=info["y2"]>=0.0:
-                    document.annotations.create(
-                        f"{name} found",
-                        page - 1,
-                        access=self.data.get('access'),
-                        x1=info["x1"],
-                        y1=info["y1"],
-                        x2=info["x2"],
-                        y2=info["y2"],
-                    )
+                    try:
+                        document.annotations.create(
+                            f"{name} found",
+                            page - 1,
+                            access=self.data.get('access'),
+                            x1=info["x1"],
+                            y1=info["y1"],
+                            x2=info["x2"],
+                            y2=info["y2"],
+                        )
+                    except APIError as e:
+                        logging.error("API Error: %s", e)
+
                     # remove from positions to not create multiple annotations
                     # on one word
                     positions.remove(info)
