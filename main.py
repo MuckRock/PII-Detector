@@ -6,7 +6,7 @@ import json
 import logging
 from commonregex import CommonRegex
 from documentcloud.addon import AddOn
-from documentcloud.exceptions import APIError
+from documentcloud.exceptions import APIError, DoesNotExistError
 
 import crim as CR
 
@@ -111,6 +111,13 @@ class Detector(AddOn):
                 except json.decoder.JSONDecodeError:
                     if document.canonical_url not in self.document_failures:
                         self.document_failures.append(document.canonical_url)
+                except DoesNotExistError as d:
+                    logging.error("API Error: %s", d)
+                    self.set_message(
+                        f"No text positions file found- document {document.id} needs"
+                        "to be OCR'd before running this Add-On"
+                    )
+                    continue
                 else:
                     # If the optional detection categories are marked, the lists are generated.
                     if self.data.get("address"):
