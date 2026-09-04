@@ -1,4 +1,5 @@
-python-documentcloud==4.1.3
+python-documentcloud==4.8.1
 requests
 https://github.com/madisonmay/CommonRegex/archive/refs/heads/master.zip
 commonregex-improved
+python-squarelet==0.6.0
